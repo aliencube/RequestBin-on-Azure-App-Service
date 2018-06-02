@@ -1,0 +1,12 @@
+version: '2'
+services:
+  redis:
+    image: redis
+  requestbin:
+    image: aliencube/requestbin
+    depends_on:
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:80"
