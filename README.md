@@ -65,12 +65,24 @@ TBD
 
 ### 2. Azure CLI ###
 
-TBD
+
+Enter the following Azure CLI command to create an Azure App Service instance.
+
+```
+az webapp create \
+    -g [RESOURCE_GROUP_NAME] \
+    -n [APP_SERVICE_NAME] \
+    -p [APP_SERVICE_PLAN_NAME] \
+    --multicontainer-config-type COMPOSE \
+    --multicontainer-config-file https://raw.githubusercontent.com/aliencube/RequestBin-on-Azure-App-Service/master/docker-compose.yml
+```
 
 
 ### 3. Azure Portal ###
 
-TBD
+When you create an Azure App Service instance, choose `Docker`, App Service Plan for Linux, and `Docker Compose`, then select `docker-compose.yml`.
+
+![](images/requestbin-compose-portal.png)
 
 
 ## Kubernetes ##
