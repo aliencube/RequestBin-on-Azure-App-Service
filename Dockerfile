@@ -34,8 +34,8 @@ ENV REDIS_URL //localhost:6379
 
 RUN sed -i 's/DEBUG = False/DEBUG = True/' requestbin/config.py
 
-EXPOSE 8000
+EXPOSE 80
 
 # Have to use this format to use $PORT environment variable
 CMD redis-server --daemonize yes \
-    && gunicorn --bind=0.0.0.0:8000 --worker-class=gevent --workers=2 --max-requests=1000 requestbin:app
+    && gunicorn --bind=0.0.0.0:80 --worker-class=gevent --workers=2 --max-requests=1000 requestbin:app
