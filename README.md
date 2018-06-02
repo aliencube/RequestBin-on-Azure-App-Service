@@ -7,7 +7,7 @@ This provides an ARM template and several container configurations to run Reques
 
 * [Azure Subscription](https://azure.microsoft.com/en-au/free/)
 * [Azure App Service on Linux](https://docs.microsoft.com/en-us/azure/app-service/containers/app-service-linux-intro)
-* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/)
+* [Azure CLI 2.0](https://docs.microsoft.com/en-us/cli/azure/)
 
 
 ## Single Container ##
@@ -47,7 +47,7 @@ When you create an Azure App Service instance, choose `Docker`, App Service Plan
 ![](images/requestbin-container-portal.png)
 
 
-## Docker Composer ##
+## Docker Compose ##
 
 If you want to run the multiple containers on your local, simply run the docker compose command.
 
