@@ -16,7 +16,7 @@ If you want to run the custom docker image on your local, simply build the `Dock
 
 ```docker
 docker build . -t requestbin_app
-docker -it -p 8000:8000 requestbin_app
+docker -it -p 8000:80 requestbin_app
 ```
 
 If you want to run this custom docker image on Azure App Service, you can achieve in three different ways:
@@ -34,7 +34,9 @@ TBD
 
 ### 3. Azure Portal ###
 
-TBD
+When you create an Azure App Service instance, choose `Docker`, App Service Plan for Linux, and `Single Container`, then point the Docker image source to [`aliencube/requestbin_with_redis:latest`](https://hub.docker.com/r/aliencube/requestbin_with_redis/).
+
+![](images/requestbin-container-portal.png)
 
 
 ## Docker Composer ##
