@@ -1,10 +1,10 @@
 FROM redis:alpine
 
-LABEL author="Justin Yoo" \
-      profile="https://twitter.com/justinchronicle" \
-      projectUrl="https://github.com/aliencube/RequestBin-on-Azure-App-Service" \
-      repositoryUrl="https://github.com/aliencube/RequestBin-on-Azure-App-Service" \
-      license="https://raw.githubusercontent.com/aliencube/RequestBin-on-Azure-App-Service/master/LICENSE"
+LABEL org.aliencube.requestbin_with_redis.author="Justin Yoo" \
+      org.aliencube.requestbin_with_redis.profile="https://twitter.com/justinchronicle" \
+      org.aliencube.requestbin_with_redis.projectUrl="https://github.com/aliencube/RequestBin-on-Azure-App-Service" \
+      org.aliencube.requestbin_with_redis.repositoryUrl="https://github.com/aliencube/RequestBin-on-Azure-App-Service" \
+      org.aliencube.requestbin_with_redis.license="https://raw.githubusercontent.com/aliencube/RequestBin-on-Azure-App-Service/master/LICENSE"
 
 RUN apk add --update \
         # git
