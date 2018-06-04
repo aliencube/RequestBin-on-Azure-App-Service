@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: requestbin
+  labels:
+    app: requestbin
+spec:
+  containers:
+  - name: redis
+    image: redis
+    ports:
+    - containerPort: 6379
+  - name: requestbin
+    image: aliencube/requestbin
+    ports:
+    - containerPort: 80
+    env:
+    - name: REDIS_URL
+      value: redis://redis:6379/0
