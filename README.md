@@ -24,7 +24,43 @@ If you want to run this custom docker image on Azure App Service, you can achiev
 
 ### 1. ARM Template ###
 
-TBD
+Update `azuredeploy.parameters.json` with the given value:
+
+```json
+{
+  ...
+  "containerType": {
+    "value": "DOCKER"
+  },
+  "containerConfig": {
+    "value": "aliencube/requestbin_with_redis:latest"
+  }
+}
+```
+
+Then run the following Azure PowerShell command:
+
+```
+New-AzureRmResourceGroupDeployment `
+    -Name [DEPLOYMENT_NAME] `
+    -ResourceGroupName [RESOURCE_GROUP_NAME] `
+    -TemplateFile azuredeploy.json `
+    -TemplateParameterFile azuredeploy.parameters.json
+    -Verbose
+```
+
+Alternatively, run the following Azure CLI command:
+
+```
+az group deployment create \
+    -n [DEPLOYMENT_NAME] \
+    -g [RESOURCE_GROUP_NAME] \
+    --template-file azuredeploy.json \
+    --parameters @azuredeploy.parameters.json \
+    --verbose
+```
+
+> **NOTE**: Currently ARM template deployment is not supported.
 
 
 ### 2. Azure CLI ###
@@ -60,7 +96,51 @@ If you want to run this docker compose on Azure App Serivce, you can achieve in 
 
 ### 1. ARM Template ###
 
-TBD
+Convert `docker-compose.yml` into a base-64 string.
+
+```poweshell
+$content = Get-Content docker-compose.yml -Encoding UTF8 -Raw
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($content)
+$config = [Convert]::ToBase64String($bytes)
+```
+
+Then update `azuredeploy.parameters.json` with the given value:
+
+```json
+{
+  ...
+  "containerType": {
+    "value": "COMPOSE"
+  },
+  "containerConfig": {
+    "value": "[BASE64_ENCODED_docker-compose.yml]"
+  }
+}
+```
+
+Then run the following Azure PowerShell command:
+
+```
+New-AzureRmResourceGroupDeployment `
+    -Name [DEPLOYMENT_NAME] `
+    -ResourceGroupName [RESOURCE_GROUP_NAME] `
+    -TemplateFile azuredeploy.json `
+    -TemplateParameterFile azuredeploy.parameters.json
+    -Verbose
+```
+
+Alternatively, run the following Azure CLI command:
+
+```
+az group deployment create \
+    -n [DEPLOYMENT_NAME] \
+    -g [RESOURCE_GROUP_NAME] \
+    --template-file azuredeploy.json \
+    --parameters @azuredeploy.parameters.json \
+    --verbose
+```
+
+> **NOTE**: Currently ARM template deployment is not supported.
 
 
 ### 2. Azure CLI ###
@@ -101,7 +181,52 @@ If you want to run this Kubernetes pod on Azure App Serivce, you can achieve in 
 
 ### 1. ARM Template ###
 
-TBD
+Convert `pod-requestbin.yml` into a base-64 string.
+
+
+```poweshell
+$content = Get-Content pod-requestbin.yml -Encoding UTF8 -Raw
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($content)
+$config = [Convert]::ToBase64String($bytes)
+```
+
+Then update `azuredeploy.parameters.json` with the given value:
+
+```json
+{
+  ...
+  "containerType": {
+    "value": "KUBE"
+  },
+  "containerConfig": {
+    "value": "[BASE64_ENCODED_pod-requestbin.yml]"
+  }
+}
+```
+
+Then run the following Azure PowerShell command:
+
+```
+New-AzureRmResourceGroupDeployment `
+    -Name [DEPLOYMENT_NAME] `
+    -ResourceGroupName [RESOURCE_GROUP_NAME] `
+    -TemplateFile azuredeploy.json `
+    -TemplateParameterFile azuredeploy.parameters.json
+    -Verbose
+```
+
+Alternatively, run the following Azure CLI command:
+
+```
+az group deployment create \
+    -n [DEPLOYMENT_NAME] \
+    -g [RESOURCE_GROUP_NAME] \
+    --template-file azuredeploy.json \
+    --parameters @azuredeploy.parameters.json \
+    --verbose
+```
+
+> **NOTE**: Currently ARM template deployment is not supported.
 
 
 ### 2. Azure CLI ###
