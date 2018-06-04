@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServicePlanName": {
+      "value": "[APP_SERVICE_PLAN_NAME]"
+    },
+    "webAppName": {
+      "value": "[WEB_APP_NAME]"
+    },
+    "containerType": {
+      "value": "[CONTAINER_TYPE]"
+    },
+    "containerConfig": {
+      "value": "[CONTAINER_CONFIG]"
+    }
+  }
+}

@@ -1,0 +1,153 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "location": {
+        "type": "string",
+        "metadata": {
+          "description": "The region where resources are deployed"
+        },
+        "defaultValue": "[resourceGroup().location]"
+      },
+  
+      "appServicePlanName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of App Service Plan on Linix"
+        }
+      },
+      "appServicePlanSkuName": {
+        "type": "string",
+        "metadata": {
+          "description": "SKU name of App Service Plan on Linix"
+        },
+        "defaultValue": "S1"
+      },
+      "appServicePlanSkuTier": {
+        "type": "string",
+        "metadata": {
+          "description": "SKU tier of App Service Plan on Linix"
+        },
+        "allowedValues": [
+          "Basic",
+          "Standard",
+          "Premium"
+        ],
+        "defaultValue": "Standard"
+      },
+      "appServicePlanSkuSize": {
+        "type": "string",
+        "metadata": {
+          "description": "SKU size of App Service Plan on Linix"
+        },
+        "defaultValue": "S1"
+      },
+
+      "webAppName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of Web App on Linix"
+        }
+      },
+
+      "containerType": {
+        "type": "string",
+        "metadata": {
+          "description": "Container type"
+        },
+        "allowedValues": [
+          "DOCKER",
+          "COMPOSE",
+          "KUBE"
+        ]
+      },
+      "containerConfig": {
+        "type": "string",
+        "metadata": {
+          "description": "Container configuration value"
+        }
+      }
+    },
+    "variables": {
+      "appServicePlan": {
+        "name": "[parameters('appServicePlanName')]",
+        "apiVersion": "[providers('Microsoft.Web', 'serverfarms').apiVersions[0]]",
+        "location": "[parameters('location')]",
+        "sku": {
+          "name": "[parameters('appServicePlanSkuName')]",
+          "tier": "[parameters('appServicePlanSkuTier')]",
+          "size": "[parameters('appServicePlanSkuSize')]"
+        }
+      },
+      "webApp": {
+        "name": "[parameters('webAppName')]",
+        "apiVersion": "[providers('Microsoft.Web', 'sites').apiVersions[0]]",
+        "location": "[parameters('location')]",
+        "kind": "[concat('app,linux', if(equals(parameters('containerType'), 'DOCKER'), ',container', ''))]",
+        "containerType": "[parameters('containerType')]",
+        "containerConfig": "[parameters('containerConfig')]"
+      },
+      "tags": {
+        "author": "Justin Yoo",
+        "profile": "https://twitter.com/justinchronicle",
+        "projectUrl": "https://github.com/aliencube/RequestBin-on-Azure-App-Service",
+        "repositoryUrl": "https://github.com/aliencube/RequestBin-on-Azure-App-Service",
+        "license": "https://raw.githubusercontent.com/aliencube/RequestBin-on-Azure-App-Service/master/LICENSE"
+        }
+    },
+    "resources": [
+      {
+        "comments": "### RESOURCE - APP SERVICE PLAN ###",
+        "apiVersion": "[variables('appServicePlan').apiVersion]",
+        "type": "Microsoft.Web/serverfarms",
+        "name": "[variables('appServicePlan').name]",
+        "location": "[variables('appServicePlan').location]",
+        "kind": "linux",
+        "tags": "[variables('tags')]",
+        "sku": {
+          "name": "[variables('appServicePlan').sku.name]",
+          "tier": "[variables('appServicePlan').sku.tier]",
+          "size": "[variables('appServicePlan').sku.size]"
+        },
+        "properties": {
+          "name": "[variables('appServicePlan').name]"
+        }
+      },
+      {
+        "comments": "### RESOURCE - WEB APP ###",
+        "apiVersion": "[variables('webApp').apiVersion]",
+        "type": "Microsoft.Web/sites",
+        "name": "[variables('webApp').name]",
+        "location": "[variables('webApp').location]",
+        "kind": "[variables('webApp').kind]",
+        "tags": "[variables('tags')]",
+        "properties": {
+          "name": "[variables('webApp').name]",
+          "reserved": true,
+          "clientAffinityEnabled": true,
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlan').name)]"
+        },
+        "resources": [
+          {
+            "comments": "### RESOURCE - WEB CONFIG ###",
+            "apiVersion": "[variables('webApp').apiVersion]",
+            "type": "config",
+            "name": "web",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/Sites', variables('webApp').name)]"
+            ],
+            "properties": {
+              "phpVersion": "",
+              "linuxFxVersion": "[concat(variables('webApp').containerType, '|', variables('webApp').containerConfig)]"
+            }
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "webAppUrl": {
+        "type": "string",
+        "value": "[concat('https://', variables('webApp').name, '.azurewebsites.net')]"
+      }
+    }
+  }
