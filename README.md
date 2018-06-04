@@ -65,7 +65,6 @@ TBD
 
 ### 2. Azure CLI ###
 
-
 Enter the following Azure CLI command to create an Azure App Service instance.
 
 ```
@@ -89,7 +88,13 @@ When you create an Azure App Service instance, choose `Docker`, App Service Plan
 
 If you want to run the multiple containers on your local using Kubernetes pod, simply run the following command.
 
-TBD
+```
+kubectl create -f pod-requestbin.yml
+kubectl expose pod requestbin \
+        --port 8000 --target-port 80 \
+        --name requestbin --type NodePort
+kubectl describe service requestbin
+```
 
 If you want to run this Kubernetes pod on Azure App Serivce, you can achieve in three different ways:
 
@@ -101,12 +106,23 @@ TBD
 
 ### 2. Azure CLI ###
 
-TBD
+Enter the following Azure CLI command to create an Azure App Service instance.
+
+```
+az webapp create \
+    -g [RESOURCE_GROUP_NAME] \
+    -n [APP_SERVICE_NAME] \
+    -p [APP_SERVICE_PLAN_NAME] \
+    --multicontainer-config-type KUBE \
+    --multicontainer-config-file https://raw.githubusercontent.com/aliencube/RequestBin-on-Azure-App-Service/master/pod-requestbin.yml
+```
 
 
 ### 3. Azure Portal ###
 
-TBD
+When you create an Azure App Service instance, choose `Docker`, App Service Plan for Linux, and `Kubernetes`, then select `pod-requestbin.yml`.
+
+![](images/requestbin-k8s-portal.png)
 
 
 ## Contribution ##
