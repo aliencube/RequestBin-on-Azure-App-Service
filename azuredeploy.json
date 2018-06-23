@@ -110,7 +110,8 @@
           "size": "[variables('appServicePlan').sku.size]"
         },
         "properties": {
-          "name": "[variables('appServicePlan').name]"
+          "name": "[variables('appServicePlan').name]",
+          "reserved": true
         }
       },
       {
@@ -121,27 +122,18 @@
         "location": "[variables('webApp').location]",
         "kind": "[variables('webApp').kind]",
         "tags": "[variables('tags')]",
+        "dependsOn": [
+          "[variables('appServicePlan').name]"
+        ],
         "properties": {
           "name": "[variables('webApp').name]",
           "reserved": true,
           "clientAffinityEnabled": true,
-          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlan').name)]"
-        },
-        "resources": [
-          {
-            "comments": "### RESOURCE - WEB CONFIG ###",
-            "apiVersion": "[variables('webApp').apiVersion]",
-            "type": "config",
-            "name": "web",
-            "dependsOn": [
-              "[resourceId('Microsoft.Web/Sites', variables('webApp').name)]"
-            ],
-            "properties": {
-              "phpVersion": "",
-              "linuxFxVersion": "[concat(variables('webApp').containerType, '|', variables('webApp').containerConfig)]"
-            }
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlan').name)]",
+          "siteConfig": {
+            "linuxFxVersion": "[concat(variables('webApp').containerType, '|', variables('webApp').containerConfig)]"
           }
-        ]
+        }
       }
     ],
     "outputs": {
