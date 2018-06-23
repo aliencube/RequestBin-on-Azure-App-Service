@@ -60,8 +60,6 @@ az group deployment create \
     --verbose
 ```
 
-> **NOTE**: As of 2018-06-04, ARM template doesn't support single-container web app deployment.
-
 
 ### 2. Azure CLI ###
 
@@ -139,8 +137,6 @@ az group deployment create \
     --parameters @azuredeploy.parameters.json \
     --verbose
 ```
-
-> **NOTE**: As of 2018-06-04, ARM template doesn't support multi-container web app deployment.
 
 
 ### 2. Azure CLI ###
@@ -225,8 +221,6 @@ az group deployment create \
     --parameters @azuredeploy.parameters.json \
     --verbose
 ```
-
-> **NOTE**: As of 2018-06-04, ARM template doesn't support multi-container web app deployment.
 
 
 ### 2. Azure CLI ###
